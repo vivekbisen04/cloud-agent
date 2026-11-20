@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101c2b" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Cloud Agent · Workspace</title>
+  </head>
+  <body>
+    <div id="login" class="login-shell">
+      <div class="login-art">
+        <a class="brand" href="/"
+          ><span class="brand-mark">✳</span
+          ><span>cloud<span class="brand-light">agent</span></span></a
+        >
+        <div class="login-message">
+          <span class="eyebrow light">YOUR CODING WORKSPACE</span>
+          <h1>Ship the next<br /><em>big thing.</em></h1>
+          <p>
+            Send work to your agent pool, follow every step, and review the
+            result when it is ready.
+          </p>
+        </div>
+        <div class="art-grid" aria-hidden="true">
+          <span class="art-node node-one">01</span><span class="art-line"></span
+          ><span class="art-node node-two">02</span
+          ><span class="art-line"></span
+          ><span class="art-node node-three">03</span>
+        </div>
+        <div class="login-foot">Built for teams that build.</div>
+      </div>
+      <main class="login-panel">
+        <div class="login-form-wrap">
+          <span class="eyebrow">WELCOME BACK</span>
+          <h2>Connect to your workspace</h2>
+          <p class="muted">
+            Enter the API key provided by your workspace admin.
+          </p>
+          <div class="mode-tabs" role="tablist" aria-label="Account type">
+            <button
+              id="mode-user"
+              class="active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+            >
+              Team member</button
+            ><button
+              id="mode-admin"
+              type="button"
+              role="tab"
+              aria-selected="false"
+            >
+              Admin
+            </button>
+          </div>
+          <form id="login-form">
+            <label for="api-key">API key</label>
+            <input
+              id="api-key"
+              type="password"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Paste your API key"
+              required
+            />
+            <p id="login-hint" class="field-hint">
+              Your key is kept in this browser tab for this session.
+            </p>
+            <button class="button primary wide" type="submit">
+              Open workspace <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+          <p id="login-error" class="form-error" role="alert" hidden></p>
+          <div class="login-help">
+            Need a key? Ask your workspace administrator.
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="workspace" class="app-shell" hidden>
+      <aside class="sidebar">
+        <a class="brand" href="/"
+          ><span class="brand-mark">✳</span
+          ><span>cloud<span class="brand-light">agent</span></span></a
+        >
+        <div class="side-label">WORKSPACE</div>
+        <nav aria-label="Main navigation">
+          <button class="nav-link active" id="nav-overview" type="button">
+            <span class="nav-icon">◫</span> Overview</button
+          ><button class="nav-link" id="nav-tasks" type="button">
+            <span class="nav-icon">☷</span> Tasks</button
+          ><button class="nav-link" id="nav-team" type="button" hidden>
+            <span class="nav-icon">♙</span> Team
+          </button>
+        </nav>
+        <div class="sidebar-spacer"></div>
+        <div class="worker-card">
+          <div class="worker-card-icon">✳</div>
+          <strong>Agent pool</strong>
+          <p>Your workers are standing by for the next task.</p>
+          <div class="worker-line">
+            <span class="live-dot"></span
+            ><span id="worker-count">Checking workers…</span>
+          </div>
+        </div>
+        <button class="profile" id="sign-out" type="button">
+          <span id="avatar" class="avatar">A</span
+          ><span class="profile-copy"
+            ><strong id="profile-name">Account</strong
+            ><small id="profile-role">Team member</small></span
+          ><span class="exit-icon">↗</span>
+        </button>
+      </aside>
+      <div class="main-area">
+        <header class="topbar">
+          <div class="breadcrumb">
+            <span>Workspace</span><span class="crumb-chevron">›</span
+            ><strong id="page-crumb">Overview</strong>
+          </div>
+          <div class="top-actions">
+            <span class="connection"
+              ><span class="live-dot"></span> Connected</span
+            ><button
+              id="refresh"
+              class="icon-button"
+              type="button"
+              title="Refresh data"
+              aria-label="Refresh data"
+            >
+              ↻
+            </button>
+          </div>
+        </header>
+        <main class="content">
+          <section class="page-intro">
+            <div>
+              <span class="eyebrow">COMMAND CENTER</span>
+              <h1 id="page-title">Overview</h1>
+              <p id="page-subtitle">
+                A clear view of everything your agents are working on.
+              </p>
+            </div>
+            <button class="button primary" id="new-task-button" type="button">
+              ＋ New task
+            </button>
+          </section>
+          <div id="notice" class="notice" role="status" hidden></div>
+          <section id="overview-panel">
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="stat-icon blue">☷</div>
+                <span>Total tasks</span><strong id="stat-total">0</strong
+                ><small>In your workspace</small>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon amber">◷</div>
+                <span>In progress</span><strong id="stat-running">0</strong
+                ><small>Queued or running</small>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon green">✓</div>
+                <span>Completed</span><strong id="stat-succeeded">0</strong
+                ><small>Ready to review</small>
+              </div>
+              <div class="stat-card">
+                <div class="stat-icon red">!</div>
+                <span>Needs attention</span><strong id="stat-failed">0</strong
+                ><small>Failed tasks</small>
+              </div>
+            </div>
+            <div class="two-columns">
+              <section class="surface recent-surface">
+                <div class="surface-heading">
+                  <div>
+                    <span class="eyebrow">LATEST ACTIVITY</span>
+                    <h2>Recent tasks</h2>
+                  </div>
+                  <button id="see-all" class="text-button" type="button">
+                    View all <span>→</span>
+                  </button>
+                </div>
+                <div id="recent-list" class="task-list"></div>
+              </section>
+              <section class="surface quick-surface">
+                <span class="eyebrow">GET STARTED</span>
+                <h2>Put your agents to work</h2>
+                <p>
+                  Describe the change you want. Your agent will work in an
+                  isolated sandbox and open a pull request when it has something
+                  ready.
+                </p>
+                <div class="quick-illustration" aria-hidden="true">
+                  <div class="quick-window">
+                    <div class="quick-dots"><i></i><i></i><i></i></div>
+                    <span class="quick-code short"></span
+                    ><span class="quick-code"></span
+                    ><span class="quick-code medium"></span
+                    ><span class="quick-code short accent"></span>
+                  </div>
+                  <div class="quick-spark">✳</div>
+                </div>
+                <button
+                  id="quick-create"
+                  class="button secondary wide"
+                  type="button"
+                >
+                  Create a task <span>→</span>
+                </button>
+              </section>
+            </div>
+          </section>
+          <section id="tasks-panel" hidden>
+            <div class="section-head">
+              <div>
+                <span class="eyebrow">YOUR WORK</span>
+                <h2>Task activity</h2>
+              </div>
+              <span id="task-count" class="count-pill">0 tasks</span>
+            </div>
+            <div class="surface tasks-surface">
+              <div id="full-task-list" class="task-list"></div>
+            </div>
+          </section>
+          <section id="team-panel" hidden>
+            <div class="section-head">
+              <div>
+                <span class="eyebrow">ACCESS CONTROL</span>
+                <h2>Team members</h2>
+              </div>
+              <button id="add-user-button" class="button primary" type="button">
+                ＋ Add member
+              </button>
+            </div>
+            <div id="users-list" class="users-grid"></div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <dialog id="task-dialog" class="modal">
+      <form id="task-form" class="modal-body">
+        <button
+          class="modal-close"
+          type="button"
+          data-close="task-dialog"
+          aria-label="Close"
+        >
+          ×</button
+        ><span class="eyebrow">NEW TASK</span>
+        <h2>What should your agent build?</h2>
+        <p class="muted">
+          Give clear instructions and choose a repository your account can
+          access.
+        </p>
+        <label for="task-repo">Repository</label
+        ><select id="task-repo" required></select
+        ><label for="task-description">Task description</label
+        ><textarea
+          id="task-description"
+          rows="5"
+          maxlength="10000"
+          placeholder="For example: Improve the README with setup instructions and examples"
+          required
+        ></textarea>
+        <div class="form-grid">
+          <div>
+            <label for="task-model">Model</label
+            ><input id="task-model" value="openrouter/free" required />
+          </div>
+          <div>
+            <label for="task-steps">Max steps</label
+            ><input
+              id="task-steps"
+              type="number"
+              min="1"
+              max="50"
+              value="25"
+              required
+            />
+          </div>
+        </div>
+        <p id="task-form-error" class="form-error" role="alert" hidden></p>
+        <div class="modal-actions">
+          <button class="button ghost" type="button" data-close="task-dialog">
+            Cancel</button
+          ><button class="button primary" type="submit">
+            Submit task <span>→</span>
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="detail-dialog" class="modal detail-modal">
+      <div class="modal-body">
+        <button
+          class="modal-close"
+          type="button"
+          data-close="detail-dialog"
+          aria-label="Close"
+        >
+          ×</button
+        ><span class="eyebrow">TASK DETAILS</span>
+        <div class="detail-heading">
+          <h2 id="detail-title"></h2>
+          <span id="detail-status" class="status-badge"></span>
+        </div>
+        <div class="detail-meta" id="detail-meta"></div>
+        <section class="progress-card" aria-label="Task progress">
+          <div class="progress-top">
+            <div>
+              <span class="eyebrow">LIVE PROGRESS</span
+              ><strong id="detail-phase">Waiting in queue</strong>
+            </div>
+            <span id="detail-step-label" class="progress-step"
+              >0 steps completed</span
+            >
+          </div>
+          <p id="detail-activity" class="progress-activity"></p>
+          <div
+            class="progress-track"
+            role="progressbar"
+            aria-label="Step budget used"
+            aria-valuemin="0"
+            id="detail-progress-track"
+          >
+            <span id="detail-progress-fill"></span>
+          </div>
+          <div class="progress-stages" id="detail-stages"></div>
+        </section>
+        <div class="detail-section">
+          <span class="eyebrow">AGENT REPORT</span>
+          <pre id="detail-report" class="report"></pre>
+        </div>
+        <div id="previous-report-wrap" class="detail-section" hidden>
+          <span class="eyebrow">PREVIOUS REPORT</span>
+          <pre id="previous-report" class="report"></pre>
+        </div>
+        <div id="detail-error-wrap" class="detail-section" hidden>
+          <span class="eyebrow">ERROR</span>
+          <pre id="detail-error" class="report error-report"></pre>
+        </div>
+        <section
+          id="instruction-section"
+          class="detail-section instruction-section"
+          hidden
+        >
+          <span class="eyebrow">FURTHER INSTRUCTIONS</span>
+          <p id="instruction-hint" class="instruction-hint">
+            Send guidance while the task is active. The agent reads it before
+            its next model step.
+          </p>
+          <div id="instruction-list" class="instruction-list"></div>
+          <form id="instruction-form" class="instruction-form">
+            <label for="instruction-text">Message to agent</label>
+            <textarea
+              id="instruction-text"
+              rows="3"
+              maxlength="4000"
+              placeholder="Add details or clarify what you want changed"
+              required
+            ></textarea>
+            <p
+              id="instruction-error"
+              class="form-error"
+              role="alert"
+              hidden
+            ></p>
+            <button
+              id="instruction-submit"
+              class="button primary"
+              type="submit"
+            >
+              Send instruction →
+            </button>
+          </form>
+          <p id="instruction-closed" class="instruction-hint" hidden>
+            This task is no longer accepting instructions. Create a new task for
+            more work.
+          </p>
+        </section>
+        <div class="modal-actions">
+          <a
+            id="detail-pr"
+            class="button primary"
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+            >Open pull request ↗</a
+          ><button
+            class="button ghost"
+            type="button"
+            data-close="detail-dialog"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </dialog>
+    <dialog id="user-dialog" class="modal">
+      <form id="user-form" class="modal-body">
+        <button
+          class="modal-close"
+          type="button"
+          data-close="user-dialog"
+          aria-label="Close"
+        >
+          ×</button
+        ><span class="eyebrow">TEAM ACCESS</span>
+        <h2>Add a team member</h2>
+        <p class="muted">
+          The new API key appears once after creation. Copy it before closing.
+        </p>
+        <label for="user-name">Name</label
+        ><input
+          id="user-name"
+          placeholder="e.g. Alice"
+          maxlength="100"
+          required
+        /><label for="user-repos">Allowed repositories</label
+        ><textarea
+          id="user-repos"
+          rows="3"
+          placeholder="owner/repository, one per line"
+          required
+        ></textarea>
+        <p class="field-hint">Enter one owner/repository per line.</p>
+        <p id="user-form-error" class="form-error" role="alert" hidden></p>
+        <div id="new-key-wrap" class="new-key-wrap" hidden>
+          <strong>Save this key now</strong><code id="new-key"></code
+          ><button id="copy-key" class="button secondary" type="button">
+            Copy key
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button class="button ghost" type="button" data-close="user-dialog">
+            Close</button
+          ><button id="create-user-submit" class="button primary" type="submit">
+            Create member <span>→</span>
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
